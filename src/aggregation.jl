@@ -211,7 +211,12 @@ end
 
 function inverse_eltype(transformation::Union{ArrayTransformation,StaticArrayTransformation},
                         x::AbstractArray)
-    inverse_eltype(transformation.inner_transformation, first(x)) # FIXME shortcut
+    T = eltype(x)
+    if T <: Real
+        return inverse_eltype(transformation.inner_transformation, zero(T))
+    else
+        return Any
+    end
 end
 
 function inverse_at!(x::AbstractVector, index,

@@ -699,3 +699,13 @@ end
     U = transform(t, x)
     @test isfinite(logabsdet(U)[1])
 end
+
+# issue #73
+@testset "inverse transformation of empty vectors" begin
+    t = as(Vector, 0)
+    @test @inferred(transform(t, Float64[])) == Float64[]
+    @test @inferred(inverse(t, Float64[])) == Float64[]
+
+    @test @inferred(transform(t, [])) == Any[]
+    @test @inferred(inverse(t, [])) == Any[]
+end
